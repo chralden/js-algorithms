@@ -64,6 +64,6 @@ module.exports = function(grunt) {
     //Task Definitions
     grunt.registerTask('build', ['clean','browserify'] );
     grunt.registerTask('default', ['build']);
-    grunt.registerTask('serve', ['connect', 'watch']);
+    grunt.registerTask('serve', ['build', 'connect', 'watch']);
 
 };
