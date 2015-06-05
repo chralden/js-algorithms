@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Algorithms</title>
+  </head>
+  <body style="padding: 0; margin: 0;">
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="build/module.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function(){
+            
+           
+            var stateEngineProto = {
+
+                //Always track the current state
+                currentState: false,
+
+                //Keep a collection of all states
+                states: {},
+
+                //### Define A State
+
+                //Define an application state by named key and pass associated function **(String, Function)**
+                defineState: function(stateName, stateFunction) {
+                    var self = this;
+
+                    //Add this state to state collection if it does not already exist and return for function chaining
+                    if(!self.states[stateName]){
+                        self.states[stateName] = stateFunction;
+                        return stateFunction;
+                    // Return false if state already exists
+                    }else{
+                        return false;
+                    }
+                },
+
+                //### Set Current State
+
+                //Set the current application state based on named key **(String)**
+                setState: function(newState) {
+                    var self = this;
+
+                    //Update current state if key exists in state collection and return state function for immediate invocation
+                    if(self.states[newState]){
+                        self.currentState = newState;
+                        return self.states[self.currentState];
+                    //Return false if key does not exist
+                    }else{
+                        return false;
+                    }
+                },
+
+                //### Get Current State
+
+                //Get the function associated with the current application state
+                getState: function() {
+                    var self = this;
+
+                    //Return state function if current state is set
+                    if(self.currentState){
+                        return self.states[self.currentState];
+                    
+                    //Return false if there is no current state
+                    }else{
+                        return false;
+                    }
+                }
+
+            };
+
+            //### State Engine Factory
+
+            //Factory that returns a new stateEngine object with specified options **(Object)**
+            var stateEngine = function(options) {
+
+                var options = options || {};
+                
+                //Always create a new states collection so that it's instance safe
+                options.states = {};
+
+                //Create new statEngine object from the prototype and extend with options
+                return $.extend(Object.create(stateEngineProto), options);
+            };
+
+            var gameState = stateEngine();
+
+            gameState.defineState('START', function(){ console.log('start'); });
+
+            console.log(gameState.states);
+            console.log(stateEngineProto.states);
+        }());
+    </script>
+  </body>
+</html>
